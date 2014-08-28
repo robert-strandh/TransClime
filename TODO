@@ -1,0 +1,22 @@
+Things to do:
+
+  * Currently, the prompts for the dictionary and text files use the
+    presentation type STRING, which means that there is no file
+    completion.  Use a presentation type that allows completion. 
+
+  * The main file should be split into several.  At the very least,
+    the GUI should be in a separate file.  There might be other
+    independent modules to identify. 
+
+  * Include commands for changing the font size from the application
+    command line. 
+
+  * Implement automatic line wrapping in order to avoid having to
+    modify the source text according to the font size. 
+
+  * Add more texts. (Beware of copyright issues).
+
+  * Fix existing entries in, and add new entries to the main
+    dictionary.
+
+  * Write documentation.
