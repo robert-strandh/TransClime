@@ -1,0 +1,58 @@
+TransClime is a CLIM-based application for learning languages.  It was
+created as a tool for learning Vietnamese.  
+
+OVERVIEW
+
+The application window is split vertically into two halves.  The text
+that the user would like to read is shown in the left half.  When the
+pointer is over a word, possible translations are shown in the right
+half. Translations of longer sequences of words in the source text are
+shown first.
+
+Words that do not appear in the dictionary are shown in red color in
+the left half.
+
+If the list of possible translations is too long to fit the window, so
+that it is impossible to read it all while keeping the pointer over
+the source text, it is possible to click on the source text, resulting
+in the translation window to be "frozen" until some word is clicked
+again.  This way, the user can click the word, move the pointer to the
+translation window, and then scroll that window. 
+
+There are three main commands available in the command-line window at
+the bottom: "Read Dictionary", "Read Text", and "Quit".  The first two
+commands prompt for a file to be read.  There is currently a single
+dictionary included, namely Dictionaries/vietanh.dict.  There is
+currently a single text included, namely Texts/rock.text.
+
+Reading the dictionary takes some time, because it creates a data
+structure that makes it easier (i.e., faster) to access it during
+normal use.  Reading the text also creates a data structure.  For that
+reason, when a new dictionary is read, the text should subsequently be
+re-read as well in order that the new dictionary be taken into
+account. 
+
+Several dictionaries can be read.  If there are multiple entries for
+the same word sequence, then the last one removes the previous one.  A
+typical use would be to first read the general dictionary, and then
+supplement it with a private dictionary.  The private dictionary could
+contain personal information or words that can not be distributed for
+reasons of copyright protection. 
+
+The source text is currently shown in a very large font.  The reason
+is so that accents are clearly visible in the Vietnamese text.  Users
+with very good eyes may want to decrease the size of the font.
+
+COMPILING
+
+Make sure ASDF knows about the location of the file "transclime.asd".
+Then type (asdf:operate 'asdf:load-op :transclime) to the Lisp REPL.
+The application depends on McCLIM and split-sequence, so these
+dependencies will be compiled first.  There should be no warnings or
+style warnings from TransClime itself, though McCLIM may create quite
+a lot.
+
+RUNNING
+
+In the Lisp REPL, evaluate the form (transclime:transclime).  The
+application window should appear immediately. 
