@@ -10,7 +10,13 @@ half. Translations of longer sequences of words in the source text are
 shown first.
 
 Words that do not appear in the dictionary are shown in red color in
-the left half.
+the left half.  Words marked in red can sometimes appear following
+some other word in the dictionary.  So for instance, in the text
+"rock.text", the word "rịch" is shown in red, because it is not in the
+dictionary.  However, the word sequence "rậm rịch" (with animation,
+with excitement) is in the dictionary, so when the pointer is over the
+word "rậm", the translation window shows the translation of the
+two-word sequence.
 
 If the list of possible translations is too long to fit the window, so
 that it is impossible to read it all while keeping the pointer over
