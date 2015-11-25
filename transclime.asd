@@ -1,6 +1,6 @@
-(cl:in-package #:common-lisp-user)
+(cl:in-package #:asdf-user)
 
-(asdf:defsystem :transclime
+(defsystem :transclime
   :depends-on (:mcclim :split-sequence :mcclim-truetype)
   :serial t
   :components
