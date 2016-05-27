@@ -265,13 +265,9 @@
 (defclass category ()
   ((%name :initarg :name :reader name)))
 
-(defgeneric category-p (object))
-
-(defmethod category-p (object)
-  nil)
-
-(defmethod category-p ((object category))
-  t)
+(defgeneric category-p (object)
+  (:method (object) nil)
+  (:method ((object category)) t))
 
 (defclass example ()
   ((%original :initarg :original :reader original)
