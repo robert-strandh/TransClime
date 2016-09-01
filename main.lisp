@@ -219,11 +219,13 @@
   ((%soft-match :initform nil :accessor soft-match)
    (%fix-entry :initform nil :accessor fix-entry))
   (:panes
-   (text (clim:make-pane 'clim:application-pane
-		    :width 800
-		    :display-time nil))
-   (dico (clim:make-pane 'clim:application-pane
-			 :width 700 :display-time nil))
+   (text :application
+	 :scroll-bars nil
+	 :width 800
+	 :display-time nil)
+   (dico :application
+	 :scroll-bars nil
+	 :width 700 :display-time nil)
    (inter :interactor :width 1500 :height 100))
   (:layouts
    (:default (vertically ()
