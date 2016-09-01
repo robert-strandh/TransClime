@@ -220,15 +220,16 @@
    (%fix-entry :initform nil :accessor fix-entry))
   (:panes
    (text :application
-	 :width 800 :height 1000
-	 :scrollbars t
+	 :width 800
 	 :display-time nil)
-   (dico :application :width 700 :height 1000 :scrollbars t :display-time nil)
+   (dico :application :width 700 :display-time nil)
    (inter :interactor :width 1500 :height 100))
   (:layouts
    (:default (vertically ()
-			 (horizontally () text dico)
-			 inter))))
+	       (horizontally (:height 1000)
+		 (scrolling (:scroll-bars t) text)
+		 (scrolling (:scroll-bars t) dico))
+	       inter))))
 			   
 (defun transclime ()
   (run-frame-top-level (make-application-frame 'transclime)))
