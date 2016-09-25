@@ -277,13 +277,9 @@
   ((%original :initarg :original :reader original)
    (%translation :initform nil :initarg :translation :reader translation)))
 
-(defgeneric example-p (object))
-
-(defmethod example-p (object)
-  nil)
-
-(defmethod example-p ((object example))
-  t)
+(defgeneric example-p (object)
+  (:method (object) nil)
+  (:method ((object example)) t))
 
 (defclass meaning ()
   ((%translation :initarg :translation :reader translation)
