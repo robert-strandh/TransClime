@@ -19,13 +19,9 @@
   ((%translation :initarg :translation :reader translation)
    (%examples :initform '() :initarg :examples :accessor examples)))
 
-(defgeneric meaning-p (object))
-
-(defmethod meaning-p (object)
-  nil)
-
-(defmethod meaning-p ((object meaning))
-  t)
+(defgeneric meaning-p (object)
+  (:method (object) nil)
+  (:method ((object meaning)) t))
 
 (defclass synonym ()
   ((%meanings :initform '() :initarg :meanings :accessor meanings)))
