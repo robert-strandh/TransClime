@@ -26,13 +26,9 @@
 (defclass synonym ()
   ((%meanings :initform '() :initarg :meanings :accessor meanings)))
 
-(defgeneric synonym-p (object))
-
-(defmethod synonym-p (object)
-  nil)
-
-(defmethod synonym-p ((object synonym))
-  t)
+(defgeneric synonym-p (object)
+  (:method (object) nil)
+  (:method ((object synonym)) t))
 
 (defclass subentry ()
   ((%category :initform (make-instance 'category :name "unknown category")
