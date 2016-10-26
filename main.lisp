@@ -207,13 +207,9 @@
 (defclass word-entry ()
   ((dico-entries :initarg :dico-entries :reader dico-entries)))
 
-(defgeneric word-entry-p (object))
-
-(defmethod word-entry-p (object)
-  nil)
-
-(defmethod word-entry-p ((object word-entry))
-  t)
+(defgeneric word-entry-p (object)
+  (:method (object) nil)
+  (:method ((object word-entry)) t))
 
 (define-application-frame transclime ()
   ((%soft-match :initform nil :accessor soft-match)
