@@ -36,13 +36,9 @@
    (%meanings :initarg :meanings :accessor meanings)
    (%synonym :initform nil :initarg :synonym :accessor synonym)))
 
-(defgeneric subentry-p (object))
-
-(defmethod subentry-p (object)
-  nil)
-
-(defmethod subentry-p ((object subentry))
-  t)
+(defgeneric subentry-p (object)
+  (:method (object) nil)
+  (:method ((object subentry)) t))
 
 (defclass entry ()
   ((%original-words :initarg :original-words :reader original-words)
