@@ -44,13 +44,9 @@
   ((%original-words :initarg :original-words :reader original-words)
    (%subentries :initform '() :initarg :subentries :accessor subentries)))
 
-(defgeneric entry-p (object))
-
-(defmethod entry-p (object)
-  nil)
-
-(defmethod entry-p ((object entry))
-  t)
+(defgeneric entry-p (object)
+  (:method (object) nil)
+  (:method ((object entry)) t))
 
 (defun create-meaning (lines)
   (setf (examples (first lines))
