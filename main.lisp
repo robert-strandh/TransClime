@@ -262,7 +262,7 @@
 			 #'alpha-char-p
 			 (complement #'alpha-char-p)))))))
 
-(define-transclime-command (com-read-dico :name t) ((filename 'string))
+(define-transclime-command (com-read-dico :name t) ((filename 'pathname))
   (with-open-file (stream filename :direction :input)
     (setf *dico* (merge-dicos *dico* (read-dico (wrap-stream stream))))))
       
