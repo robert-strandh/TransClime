@@ -262,7 +262,11 @@
 			 #'alpha-char-p
 			 (complement #'alpha-char-p)))))))
 
-(define-transclime-command (com-read-dico :name t) ((filename 'pathname))
+(define-transclime-command (com-read-dico :name t)
+    ((filename 'pathname
+               :default (namestring (first (directory ".")))
+               :default-type 'pathname
+               :insert-default t))
   (with-open-file (stream filename :direction :input)
     (setf *dico* (merge-dicos *dico* (read-dico (wrap-stream stream))))))
       
@@ -297,7 +301,11 @@
       (string-equal (de-accentify-string s1) (de-accentify-string s2))
       (string-equal s1 s2)))
 
-(define-transclime-command (com-read-text :name t) ((filename 'string))
+(define-transclime-command (com-read-text :name t)
+    ((filename 'pathname
+               :default (namestring (first (directory ".")))
+               :default-type 'pathname
+               :insert-default t))
   (with-open-file (stream filename :direction :input)
     (let* ((out (find-pane-named *application-frame* 'text))
 	   (medium (sheet-medium out))
