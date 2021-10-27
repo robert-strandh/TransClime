@@ -324,6 +324,7 @@
 				   (push entry (gethash word dico))))
 			dico)))
       (window-clear out)
+      (setf (stream-drawing-p out) nil)
       (with-text-style (medium text-style)
 	(with-text-size (medium :huge)
 	  (loop for string in text
@@ -352,7 +353,9 @@
 						     :dico-entries dico-entries)
 				      'word-entry)
 			       (write-string string out))))))
-	  (finish-output out))))))
+	  (finish-output out)))
+      (setf (stream-drawing-p out) t)
+      (replay (stream-output-history out) out))))
 
 (defun show-entry (word-entry)
   (unless (fix-entry *application-frame*)
