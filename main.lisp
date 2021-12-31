@@ -231,6 +231,11 @@
 	       inter))))
 			   
 (defun transclime ()
+  (let ((rc-path (merge-pathnames (user-homedir-pathname)
+                                  #p".transclimerc")))
+    (with-open-file (stream rc-path :if-does-not-exist nil)
+      (unless (null stream)
+        (load stream))))
   (run-frame-top-level (make-application-frame 'transclime)))
 
 ;;; Just so that it can be traced. 
