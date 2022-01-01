@@ -278,6 +278,14 @@
 (define-transclime-command (com-clear-dico :name t) ()
   (setf *dico* '()))
 
+(define-transclime-command (com-cd :name t)
+    ((filename 'pathname
+               :default (namestring (first (directory ".")))
+               :default-type 'pathname
+               :insert-default t))
+  (setf *default-pathname-defaults*
+        (pathname filename)))
+
 (defparameter *translate*
   '((#\á . #\a) (#\à . #\a) (#\ã . #\a) (#\ạ . #\a) (#\ả . #\a)
     (#\â . #\a) (#\ấ . #\a) (#\ầ . #\a) (#\ẫ . #\a) (#\ậ . #\a) (#\ẩ . #\a)
