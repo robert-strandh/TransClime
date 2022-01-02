@@ -213,7 +213,10 @@
 
 (define-application-frame transclime ()
   ((%soft-match :initform nil :accessor soft-match)
-   (%fix-entry :initform nil :accessor fix-entry))
+   (%fix-entry :initform nil :accessor fix-entry)
+   (%current-directory
+    :initarg :current-directory
+    :accessor current-directory))
   (:panes
    (text :application
 	 :scroll-bars nil
@@ -236,7 +239,9 @@
     (with-open-file (stream rc-path :if-does-not-exist nil)
       (unless (null stream)
         (load stream))))
-  (run-frame-top-level (make-application-frame 'transclime)))
+  (run-frame-top-level
+   (make-application-frame 'transclime
+     :current-directory *default-pathname-defaults*)))
 
 ;;; Just so that it can be traced. 
 (defun my-alpha-char-p (char)
@@ -269,7 +274,7 @@
 
 (define-transclime-command (com-read-dico :name t)
     ((filename 'pathname
-               :default (namestring (first (directory ".")))
+               :default (namestring (current-directory *application-frame*))
                :default-type 'pathname
                :insert-default t))
   (with-open-file (stream filename :direction :input)
@@ -280,10 +285,10 @@
 
 (define-transclime-command (com-cd :name t)
     ((filename 'pathname
-               :default (namestring (first (directory ".")))
+               :default (namestring (current-directory *application-frame*))
                :default-type 'pathname
                :insert-default t))
-  (setf *default-pathname-defaults*
+  (setf (current-directory *application-frame*)
         (pathname filename)))
 
 (defparameter *translate*
@@ -316,7 +321,7 @@
 
 (define-transclime-command (com-read-text :name t)
     ((filename 'pathname
-               :default (namestring (first (directory ".")))
+               :default (namestring (current-directory *application-frame*))
                :default-type 'pathname
                :insert-default t))
   (with-open-file (stream filename :direction :input)
