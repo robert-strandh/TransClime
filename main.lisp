@@ -220,7 +220,7 @@
   (:panes
    (text :application
 	 :scroll-bars nil
-	 :width 800
+	 :width 1200
 	 :display-time nil)
    (dico :application
 	 :scroll-bars nil
@@ -373,6 +373,7 @@
 			       (write-string string out))))))
 	  (finish-output out)))
       (setf (stream-drawing-p out) t)
+      (change-space-requirements out)
       (replay (stream-output-history out) out))))
 
 (defun show-entry (word-entry)
