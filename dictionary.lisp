@@ -32,7 +32,7 @@
 
 (defclass subentry ()
   ((%category :initform (make-instance 'category :name "unknown category")
-	      :initarg :category :reader category)
+              :initarg :category :reader category)
    (%meanings :initarg :meanings :accessor meanings)
    (%synonym :initform nil :initarg :synonym :accessor synonym)))
 
@@ -50,88 +50,88 @@
 
 (defun create-meaning (lines)
   (setf (examples (first lines))
-	(rest lines))
+        (rest lines))
   (first lines))
 
 (defun create-meanings (lines)
   (let ((pos (position-if #'meaning-p lines :start 1)))
     (if (null pos)
-	(list (create-meaning lines))
-	(cons (create-meaning (subseq lines 0 pos))
-	      (create-meanings (nthcdr pos lines))))))
+        (list (create-meaning lines))
+        (cons (create-meaning (subseq lines 0 pos))
+              (create-meanings (nthcdr pos lines))))))
 
 (defun create-synonym (lines)
   (setf (meanings (first lines))
-	(create-meanings (rest lines)))
+        (create-meanings (rest lines)))
   (first lines))
 
 (defun create-subentry (lines)
   (let ((pos (position-if #'synonym-p lines)))
     (if (null pos)
-	(make-instance 'subentry
-		       :category (first lines)
-		       :meanings (create-meanings (rest lines)))
-	(make-instance 'subentry
-		       :category (first lines)
-		       :meanings (create-meanings (subseq lines 1 pos))
-		       :synonym (create-synonym (nthcdr pos lines))))))
+        (make-instance 'subentry
+                       :category (first lines)
+                       :meanings (create-meanings (rest lines)))
+        (make-instance 'subentry
+                       :category (first lines)
+                       :meanings (create-meanings (subseq lines 1 pos))
+                       :synonym (create-synonym (nthcdr pos lines))))))
 
 (defun create-subentries (lines)
   (let ((pos (position-if #'category-p lines :start 1)))
     (if (null pos)
-	(list (create-subentry lines))
-	(cons (create-subentry (subseq lines 0 pos))
-	      (create-subentries (nthcdr pos lines))))))
+        (list (create-subentry lines))
+        (cons (create-subentry (subseq lines 0 pos))
+              (create-subentries (nthcdr pos lines))))))
 
 (defun create-entry (lines)
   (let ((remaining-lines
-	 (if (category-p (second lines))
-	     (rest lines)
-	     (cons (make-instance 'category :name "unknown category") (rest lines)))))
+         (if (category-p (second lines))
+             (rest lines)
+             (cons (make-instance 'category :name "unknown category") (rest lines)))))
     (setf (subentries (first lines))
-	  (create-subentries remaining-lines))
+          (create-subentries remaining-lines))
     (first lines)))
 
 (defun create-entries (lines)
   (loop for pos = (position-if #'entry-p lines :start 1)
-	when (null pos) collect (create-entry lines)
-	until (null pos)
-	collect (create-entry (subseq lines 0 pos))
-	do (setf lines (nthcdr pos lines))))
+        when (null pos) collect (create-entry lines)
+        until (null pos)
+        collect (create-entry (subseq lines 0 pos))
+        do (setf lines (nthcdr pos lines))))
 
 (defun parse-line (char line)
   (ecase char
     (#\@ (make-instance 'entry
-			:original-words
-			(split-sequence:split-sequence
-			 #\Space line 
-			 :remove-empty-subseqs t)))
+                        :original-words
+                        (split-sequence:split-sequence
+                         #\Space line 
+                         :remove-empty-subseqs t)))
     (#\- (make-instance 'meaning
-			:translation line))
+                        :translation line))
     (#\= (let ((pos (position #\+ line)))
-	   (if (null pos)
-	       (make-instance 'example :original line)
-	       (make-instance 'example
-			      :original (subseq line 0 pos)
-			      :translation (subseq line (1+ pos))))))
+           (if (null pos)
+               (make-instance 'example :original line)
+               (make-instance 'example
+                              :original (subseq line 0 pos)
+                              :translation (subseq line (1+ pos))))))
     (#\* (make-instance 'category :name line))
     (#\# (make-instance 'synonym))))
 
 (defun parse-lines (stream)
   (loop for char = (read-char-wrapped stream)
-	until (null char)
-	if (member char '(#\@ #\- #\= #\* #\#))
-	collect (parse-line char (read-line-wrapped stream))
-	else do (progn (unread-char-wrapped char stream) (read-line-wrapped stream))))
+        until (null char)
+        if (member char '(#\@ #\- #\= #\* #\#))
+        collect (parse-line char (read-line-wrapped stream))
+        else do (progn (unread-char-wrapped char stream) (read-line-wrapped stream))))
 
 
 (defun entry-less (entry1 entry2)
   (labels ((words-less (words1 words2)
-	     (cond ((null words1) t)
-		   ((null words2) nil)
-		   ((string-lessp (first words1) (first words2)) t)
-		   ((string-lessp (first words2) (first words1)) nil)
-		   (t (words-less (rest words1) (rest words2))))))
+             (cond ((null words1) t)
+                   ((null words2) nil)
+                   ((string-lessp (first words1) (first words2)) t)
+                   ((string-lessp (first words2) (first words1)) nil)
+                   (t (words-less (rest words1) (rest words2))))))
     (words-less (original-words entry1) (original-words entry2))))
 
 (defun entry-equal (entry1 entry2)
@@ -139,14 +139,14 @@
 
 (defun merge-dicos (entries1 entries2)
   (loop until (and (null entries1) (null entries2))
-	collect (cond ((null entries1) (pop entries2))
-		      ((null entries2) (pop entries1))
-		      ((entry-equal (first entries1) (first entries2))
-		       (pop entries1)
-		       (pop entries2))
-		      ((entry-less (first entries1) (first entries2))
-		       (pop entries1))
-		      (t (pop entries2)))))
+        collect (cond ((null entries1) (pop entries2))
+                      ((null entries2) (pop entries1))
+                      ((entry-equal (first entries1) (first entries2))
+                       (pop entries1)
+                       (pop entries2))
+                      ((entry-less (first entries1) (first entries2))
+                       (pop entries1))
+                      (t (pop entries2)))))
 
 (defun read-dico (stream)
   (sort (create-entries (parse-lines stream)) #'entry-less))
